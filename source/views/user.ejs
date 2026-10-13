@@ -17,13 +17,39 @@
   <p><em><%= profileUser.status %></em></p>
 <% } %>
 
-<% if (locals.user && locals.user.user_id !== profileUser.user_id) { %>
-  <form action="/user/<%= profileUser.user_id %>/friend" method="post">
-    <% if (isFriend) { %>
-      <button type="submit" disabled>Уже в друзьях</button>
-    <% } else { %>
+<%# --- Кнопки действий в зависимости от контекста --- %>
+
+<% if (isSelf) { %>
+  <p><strong>Это ваша страница</strong></p>
+<% } else if (locals.user) { %>
+  <% if (isFriend) { %>
+    <form action="/user/<%= profileUser.user_id %>/unfriend"
+          method="post" style="display:inline">
+      <button type="submit">Удалить из друзей</button>
+    </form>
+  <% } else { %>
+    <form action="/user/<%= profileUser.user_id %>/friend"
+          method="post" style="display:inline">
       <button type="submit">Добавить в друзья</button>
-    <% } %>
+    </form>
+  <% } %>
+<% } else { %>
+  <p><a href="/auth/login">Войдите</a>, чтобы добавить в друзья</p>
+<% } %>
+
+<%# --- Форма создания поста (только на своей странице) --- %>
+
+<% if (isSelf) { %>
+  <h2>Новый пост</h2>
+  <form action="/user/<%= profileUser.user_id %>/post" method="post">
+    <p>
+      <textarea name="text" rows="4" cols="60"
+                placeholder="Что нового?"
+                required maxlength="5000"></textarea>
+    </p>
+    <p>
+      <button type="submit">Опубликовать</button>
+    </p>
   </form>
 <% } %>
 
