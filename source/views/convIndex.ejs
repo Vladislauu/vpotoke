@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сообщения</title>
+  <style>
+    .messenger { display: flex; height: 75vh; border: 1px solid #ccc; }
+    .chats { width: 280px; border-right: 1px solid #ccc; overflow-y: auto; }
+    .chat-item { display: flex; align-items: center; gap: 8px;
+                 padding: 8px; border-bottom: 1px solid #eee;
+                 text-decoration: none; color: inherit; }
+    .chat-item.active { background: #eef; }
+    .dialog { flex: 1; display: flex; flex-direction: column; }
+    .dialog h2 { margin: 0; padding: 8px; border-bottom: 1px solid #ccc; }
+    .messages { flex: 1; overflow-y: auto; padding: 8px; }
+    .message { margin-bottom: 8px; }
+    .message .author { font-weight: bold; }
+    .message small { color: #777; margin-left: 6px; }
+    .message-form { display: flex; gap: 6px; padding: 8px;
+                    border-top: 1px solid #ccc; }
+    .message-form input[type=text] { flex: 1; }
+  </style>
+</head>
+<body>
+<%- include('includes/header.ejs') %>
+
+<h1>Сообщения</h1>
+<p><a href="/conv/create">+ Создать беседу</a></p>
+
+<div class="messenger">
+  <aside class="chats">
+    <% if (convs.length === 0) { %>
+      <p style="padding: 8px;">Нет бесед</p>
+    <% } %>
+    <% for (const c of convs) { %>
+      <a class="chat-item <%= (activeConv && activeConv.conv_id === c.conv_id) ? 'active' : '' %>"
+         href="/conv/<%= c.conv_id %>">
+        <img src="<%= c.conv_avatar || '/static/default-conv.png' %>"
+             width="32" height="32" alt="">
+        <span><%= c.conv_name %></span>
+      </a>
+    <% } %>
+  </aside>
+
+  <section class="dialog">
+    <% if (!activeConv) { %>
+      <p style="padding: 8px;">Выберите беседу слева</p>
+    <% } else { %>
+      <h2><%= activeConv.conv_name %></h2>
+
+      <div class="messages">
+        <% if (messages.length === 0) { %>
+          <p>Сообщений пока нет</p>
+        <% } %>
+        <% for (const m of messages) { %>
+          <div class="message">
+            <span class="author"><%= m.user.nickname %>:</span>
+            <span class="text"><%= m.text %></span>
+            <small><%= new Date(m.sent).toLocaleString('ru-RU') %></small>
+          </div>
+        <% } %>
+      </div>
+
+      <form class="message-form"
+            action="/conv/<%= activeConv.conv_id %>/message" method="post">
+        <input type="text" name="text" placeholder="Сообщение..."
+               autocomplete="off" required>
+        <button type="submit">Отправить</button>
+      </form>
+    <% } %>
+  </section>
+</div>
+
+</body>
+</html>

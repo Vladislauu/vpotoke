@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация</title>
+</head>
+<body>
+
+<h1>Регистрация</h1>
+
+<form action="/auth/register" method="post">
+
+  <p>
+    <label>Никнейм</label><br>
+    <input name="nickname" value="<%= body.nickname || '' %>">
+  </p>
+
+  <p>
+    <label>Пароль</label><br>
+    <input type="password" name="password">
+  </p>
+
+  <p>
+    <label>Повтор пароля</label><br>
+    <input type="password" name="password2">
+  </p>
+
+  <p>
+    <input type="submit" value="Зарегистрироваться">
+  </p>
+
+</form>
+
+<p>
+  Уже есть аккаунт?
+  <a href="/auth/login">Войти</a>
+</p>
+
+</body>
+</html>

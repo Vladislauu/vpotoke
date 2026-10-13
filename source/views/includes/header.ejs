@@ -1,0 +1,22 @@
+<header>
+  <nav>
+    <a href="/">Лента</a>
+    |
+    <a href="/conv">Сообщения</a>
+    |
+    <% if (locals.user) { %>
+      <a href="/user/<%= user.user_id %>">
+        <img src="<%= user.avatar_path || '/static/default-avatar.png' %>"
+             alt="avatar" width="24" height="24">
+        <%= user.nickname %>
+      </a>
+      |
+      <a href="/auth/logout">Выйти</a>
+    <% } else { %>
+      <a href="/auth/login">Войти</a>
+      |
+      <a href="/auth/register">Регистрация</a>
+    <% } %>
+  </nav>
+  <hr>
+</header>

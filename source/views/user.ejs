@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title><%= profileUser.nickname %></title>
+</head>
+<body>
+<%- include('includes/header.ejs') %>
+
+<h1>
+  <img src="<%= profileUser.avatar_path || '/static/default-avatar.png' %>"
+       alt="avatar" width="64" height="64">
+  <%= profileUser.nickname %>
+</h1>
+
+<% if (profileUser.status) { %>
+  <p><em><%= profileUser.status %></em></p>
+<% } %>
+
+<% if (locals.user && locals.user.user_id !== profileUser.user_id) { %>
+  <form action="/user/<%= profileUser.user_id %>/friend" method="post">
+    <% if (isFriend) { %>
+      <button type="submit" disabled>Уже в друзьях</button>
+    <% } else { %>
+      <button type="submit">Добавить в друзья</button>
+    <% } %>
+  </form>
+<% } %>
+
+<h2>Посты</h2>
+
+<% if (posts.length === 0) { %>
+  <p>Постов нет</p>
+<% } else { %>
+  <% for (const post of posts) { %>
+    <%- include('includes/post.ejs', { post }) %>
+  <% } %>
+<% } %>
+
+</body>
+</html>

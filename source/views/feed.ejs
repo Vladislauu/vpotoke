@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лента</title>
+</head>
+<body>
+<%- include('includes/header.ejs') %>
+
+<h1>Лента</h1>
+
+<% if (!locals.user) { %>
+  <p>Чтобы увидеть ленту, <a href="/auth/login">войдите</a>.</p>
+<% } else if (posts.length === 0) { %>
+  <p>Постов пока нет. Подпишитесь на кого-нибудь!</p>
+<% } else { %>
+  <% for (const post of posts) { %>
+    <%- include('includes/post.ejs', { post }) %>
+  <% } %>
+<% } %>
+
+</body>
+</html>

@@ -3,5 +3,4 @@ import methodOverride from 'method-override';
 
 const postRouter = Router();
 
-postRouter.use(urlencoded({extended: true}));
-postRouter.use(methodOverride('_method'));
+export default postRouter;

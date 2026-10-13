@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Вход</title>
+</head>
+<body>
+
+<h1>Вход</h1>
+
+<form action="/auth/login" method="post">
+
+  <p>
+    <label>Никнейм</label><br>
+    <input name="nickname" value="<%= body.nickname || '' %>">
+  </p>
+
+  <p>
+    <label>Пароль</label><br>
+    <input type="password" name="password">
+  </p>
+
+  <p>
+    <input type="submit" value="Войти">
+  </p>
+
+</form>
+
+<p>
+  Нет аккаунта?
+  <a href="/auth/register">Зарегистрироваться</a>
+</p>
+
+</body>
+</html>

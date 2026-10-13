@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Создать беседу</title>
+</head>
+<body>
+<%- include('includes/header.ejs') %>
+
+<h1>Создать беседу</h1>
+
+<form action="/conv/create" method="post">
+  <p>
+    <label>Название беседы</label><br>
+    <input type="text" name="conv_name" required
+           minlength="3" maxlength="128">
+  </p>
+
+  <p>
+    <label>Аватар (URL)</label><br>
+    <input type="text" name="conv_avatar"
+           placeholder="/static/default-conv.png">
+  </p>
+
+  <fieldset>
+    <legend>Участники</legend>
+    <% if (users.length === 0) { %>
+      <p>Нет других пользователей</p>
+    <% } %>
+    <% for (const u of users) { %>
+      <label>
+        <input type="checkbox" name="user_ids" value="<%= u.user_id %>">
+        <img src="<%= u.avatar_path || '/static/default-avatar.png' %>"
+             width="20" height="20" alt="">
+        <%= u.nickname %>
+      </label><br>
+    <% } %>
+  </fieldset>
+
+  <p>
+    <button type="submit">Создать</button>
+    <a href="/conv">Отмена</a>
+  </p>
+</form>
+
+</body>
+</html>
