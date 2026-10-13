@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мои друзья</title>
+  <style>
+    .friend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .friend-row img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .friend-row .name {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+<%- include('includes/header.ejs') %>
+
+<h1>Мои друзья</h1>
+
+<% if (friends.length === 0) { %>
+  <p>У вас пока нет друзей.</p>
+  <p>
+    Найдите интересных людей на их страницах и добавьте их в друзья.
+  </p>
+<% } else { %>
+  <% for (const f of friends) { %>
+    <div class="friend-row">
+      <img src="<%= f.avatar_path || '/static/default-avatar.png' %>"
+           alt="avatar">
+      <div class="name">
+        <a href="/user/<%= f.user_id %>"><%= f.nickname %></a>
+        <% if (f.status) { %>
+          <div><small><%= f.status %></small></div>
+        <% } %>
+      </div>
+      <form action="/user/<%= f.user_id %>/unfriend" method="post">
+        <button type="submit">Удалить из друзей</button>
+      </form>
+    </div>
+  <% } %>
+<% } %>
+
+</body>
+</html>

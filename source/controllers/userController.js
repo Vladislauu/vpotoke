@@ -116,7 +116,6 @@ export async function removeFriend(req, res, next) {
     if (isNaN(targetId)) return res.status(400).send('Некорректный id');
     if (req.user.user_id === targetId) return res.redirect(`/user/${targetId}`);
 
-    // Дружба хранится как нормализованная пара (min, max)
     const a = Math.min(req.user.user_id, targetId);
     const b = Math.max(req.user.user_id, targetId);
 
@@ -124,6 +123,13 @@ export async function removeFriend(req, res, next) {
       where: { first_id: a, second_id: b }
     });
 
+    // Возврат туда, откуда пришёл запрос, если это безопасный локальный путь
+    const back = req.body.redirect_to;
+    if (typeof back === 'string' && back.startsWith('/')) {
+      return res.redirect(back);
+    }
+
+    // По умолчанию — на страницу бывшего друга
     res.redirect(`/user/${targetId}`);
   } catch (err) {
     next(err);
@@ -134,4 +140,37 @@ export async function removeFriend(req, res, next) {
 export function me(req, res) {
   if (!req.user) return res.redirect('/auth/login');
   res.redirect(`/user/${req.user.user_id}`);
+}
+
+export async function listFriends(req, res, next) {
+  try {
+    if (!req.user) return res.redirect('/auth/login');
+
+    const me = req.user.user_id;
+
+    const links = await Friendship.findAll({
+      where: {
+        [Op.or]: [{ first_id: me }, { second_id: me }]
+      },
+      attributes: ['first_id', 'second_id']
+    });
+
+    const friendIds = [
+      ...new Set(
+        links.map(l => l.first_id === me ? l.second_id : l.first_id)
+      )
+    ];
+
+    const friends = friendIds.length === 0
+      ? []
+      : await User.findAll({
+          where: { user_id: { [Op.in]: friendIds } },
+          attributes: ['user_id', 'nickname', 'avatar_path', 'status'],
+          order: [['nickname', 'ASC']]
+        });
+
+    res.render('friends', { friends });
+  } catch (err) {
+    next(err);
+  }
 }

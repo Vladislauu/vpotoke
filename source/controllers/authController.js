@@ -54,11 +54,12 @@ export async function login(req, res, next) {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Вход выполнен',
       token,
       user: user.toJSON()
     });
+    res.redirect('/');
   } catch (err) {
     next(err);
   }

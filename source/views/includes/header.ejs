@@ -5,6 +5,8 @@
     <a href="/conv">Сообщения</a>
     |
     <% if (locals.user) { %>
+      <a href="/user/friends">Друзья</a>
+      |
       <a href="/user/<%= user.user_id %>">
         <img src="<%= user.avatar_path || '/static/default-avatar.png' %>"
              alt="avatar" width="24" height="24">
