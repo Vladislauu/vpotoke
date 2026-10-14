@@ -20,14 +20,14 @@ export async function isLoggedIn(req, res, next) {
     const payload = jwt.verify(token, SECRET);
     const user = await User.findByPk(payload.id);
     if (!user) {
-        res.status(401);
-        return res.status(401).json({ message: 'Пользователь не найден' });
+      res.status(401);
+      return res.status(401).json({ message: 'Пользователь не найден' });
     }
     req.user = user;
     next();
   } catch (err) {
-        res.status(401);
-        return res.status(401).json({ message: 'Недействительный или истёкший жетон' });
+      res.status(401);
+      return res.status(401).json({ message: 'Недействительный или истёкший жетон' });
   }
 }
 

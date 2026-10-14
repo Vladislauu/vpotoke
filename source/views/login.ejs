@@ -7,29 +7,31 @@
 <body>
 
 <h1>Вход</h1>
+  <% if (locals.error) { %>
+      <span style="color:red"><%= code %>:<%= error %></span>
+  <% } %>
+  <form action="/auth/login" method="post">
 
-<form action="/auth/login" method="post">
+    <p>
+      <label>Никнейм</label><br>
+      <input name="nickname" value="<%= body.nickname || '' %>">
+    </p>
+
+    <p>
+      <label>Пароль</label><br>
+      <input type="password" name="password">
+    </p>
+
+    <p>
+      <input type="submit" value="Войти">
+    </p>
+
+  </form>
 
   <p>
-    <label>Никнейм</label><br>
-    <input name="nickname" value="<%= body.nickname || '' %>">
+    Нет аккаунта?
+    <a href="/auth/register">Зарегистрироваться</a>
   </p>
-
-  <p>
-    <label>Пароль</label><br>
-    <input type="password" name="password">
-  </p>
-
-  <p>
-    <input type="submit" value="Войти">
-  </p>
-
-</form>
-
-<p>
-  Нет аккаунта?
-  <a href="/auth/register">Зарегистрироваться</a>
-</p>
 
 </body>
 </html>
