@@ -168,7 +168,7 @@ export async function listFriends(req, res, next) {
           attributes: ['user_id', 'nickname', 'avatar_path', 'status'],
           order: [['nickname', 'ASC']]
         });
-
+        
     res.render('friends', { friends });
   } catch (err) {
     next(err);

@@ -34,7 +34,7 @@
 <% } else { %>
   <% for (const f of friends) { %>
     <div class="friend-row">
-      <img src="<%= f.avatar_path || '/static/default-avatar.png' %>"
+      <img src="<%= f.avatar_path || '/static/default-avatar.jpg' %>"
            alt="avatar">
       <div class="name">
         <a href="/user/<%= f.user_id %>"><%= f.nickname %></a>
