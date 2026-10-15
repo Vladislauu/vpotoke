@@ -30,7 +30,7 @@
     <% for (const u of users) { %>
       <label>
         <input type="checkbox" name="user_ids" value="<%= u.user_id %>">
-        <img src="<%= u.avatar_path || '/static/default-avatar.png' %>"
+        <img src="<%= u.avatar_path || '/static/default-avatar.jpg' %>"
              width="20" height="20" alt="">
         <%= u.nickname %>
       </label><br>

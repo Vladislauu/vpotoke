@@ -1,6 +1,6 @@
 <article class="post">
   <header>
-    <img src="<%= post.user.avatar_path || '/static/default-avatar.png' %>"
+    <img src="<%= post.user.avatar_path || '/static/default-avatar.jpg' %>"
          alt="avatar" width="48" height="48">
     <a href="/user/<%= post.user.user_id %>"><%= post.user.nickname %></a>
     <time><%= new Date(post.created).toLocaleString('ru-RU') %></time>
