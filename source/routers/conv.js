@@ -6,6 +6,10 @@ import {
 
 const convRouter = Router();
 
+convRouter.use((req, res, next) => {
+  if (req.user == undefined) return res.redirect('/auth/login');
+  else next();
+})
 convRouter.get('/', index);
 convRouter.get('/create', createPage);
 convRouter.post('/create', create);

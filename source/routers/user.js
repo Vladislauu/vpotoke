@@ -7,7 +7,10 @@ import {
 
 const userRouter = Router();
 
-
+userRouter.use((req, res, next) => {
+  if (req.user == undefined) return res.redirect('/auth/login');
+  else next();
+})
 userRouter.get('/me', me);
 userRouter.get('/friends', listFriends);
 

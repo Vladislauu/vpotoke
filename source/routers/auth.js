@@ -10,7 +10,6 @@ import { isLoggedIn } from '../middleware/authMiddleware.js';
 
 const authRouter = Router();
 
-
 authRouter.get('/register', (req, res) => {
     res.render('register.ejs', {
         errors: {},
@@ -30,7 +29,4 @@ authRouter.post('/login', handleErrors, login);
 authRouter.get('/me', isLoggedIn, me);
 authRouter.get('/logout', isLoggedIn, logout);
 
-authRouter.get('/', (req, res) => {
-    res.send("Auth page");
-})
 export default authRouter;
