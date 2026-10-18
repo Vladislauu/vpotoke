@@ -11,7 +11,7 @@ export async function show(req, res, next) {
     const profileUser = await User.findByPk(userId, {
       attributes: ['user_id', 'nickname', 'avatar_path', 'status']
     });
-    if (!profileUser) return res.status(404).send('Пользователь не найден');
+    if (!profileUser) return res.redirect('/user/friends');
 
     const posts = await Post.findAll({
       where: { user_id: userId },
@@ -23,8 +23,7 @@ export async function show(req, res, next) {
       order: [['created', 'DESC']],
       limit: 50
     });
-
-    // Флаги для шаблона
+    
     const isSelf = req.user && req.user.user_id === userId;
 
     let isFriend = false;
@@ -46,7 +45,6 @@ export async function show(req, res, next) {
   }
 }
 
-// POST /user/:id/post — создать пост (только на своей странице)
 export async function createPost(req, res, next) {
   try {
     if (!req.user) return res.redirect('/auth/login');
