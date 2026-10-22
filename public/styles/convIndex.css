@@ -13,3 +13,101 @@
 .message-form { display: flex; gap: 6px; padding: 8px;
                 border-top: 1px solid #ccc; }
 .message-form input[type=text] { flex: 1; }
+
+/* Правая панель участников */
+.members {
+  width: 260px;
+  border-left: 1px solid #ccc;
+  padding: 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.members h3 {
+  margin: 0 0 8px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.member img {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.member .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member .role-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+
+.member select {
+  font-size: 12px;
+  padding: 1px 2px;
+  max-width: 80px;
+}
+
+.member .role-form button,
+.member .kick-form button {
+  font-size: 12px;
+  padding: 1px 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.member .role-form button:hover {
+  background: #e8f5e8;
+  border-color: #4a4;
+}
+
+.member .kick-form button:hover {
+  background: #fee;
+  border-color: #a00;
+  color: #a00;
+}
+
+.member .role {
+  color: #777;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.leave-wrap {
+  margin-top: auto;      /* прижимаем кнопку к низу */
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.btn-danger {
+  width: 100%;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #a00;
+  color: #a00;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-danger:hover {
+  background: #a00;
+  color: #fff;
+}
