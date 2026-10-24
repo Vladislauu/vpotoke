@@ -1,70 +1,191 @@
-.messenger { display: flex; height: 75vh; border: 1px solid #ccc; }
-.chats { width: 280px; border-right: 1px solid #ccc; overflow-y: auto; }
-.chat-item { display: flex; align-items: center; gap: 8px;
-                padding: 8px; border-bottom: 1px solid #eee;
-                text-decoration: none; color: inherit; }
-.chat-item.active { background: #eef; }
-.dialog { flex: 1; display: flex; flex-direction: column; }
-.dialog h2 { margin: 0; padding: 8px; border-bottom: 1px solid #ccc; }
-.messages { flex: 1; overflow-y: auto; padding: 8px; }
-.message { margin-bottom: 8px; }
-.message .author { font-weight: bold; }
-.message small { color: #777; margin-left: 6px; }
-.message-form { display: flex; gap: 6px; padding: 8px;
-                border-top: 1px solid #ccc; }
-.message-form input[type=text] { flex: 1; }
-
-/* Правая панель участников */
-.members {
-  width: 260px;
-  border-left: 1px solid #ccc;
-  padding: 8px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  font-size: 13px;
+/* ==========================================================
+   Базовые настройки — чтобы width+padding не раздували блоки
+   ========================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-.members h3 {
-  margin: 0 0 8px 0;
-  padding-bottom: 6px;
+/* ==========================================================
+   Контейнер: три колонки строго в ряд
+   ========================================================== */
+.messenger {
+  display: flex;
+  flex-direction: row;
+  height: 75vh;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ==========================================================
+   Левая колонка: список чатов
+   ========================================================== */
+.chats {
+  width: 280px;
+  flex-shrink: 0;              /* ← не сжимается */
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  text-decoration: none;
+  color: inherit;
+}
+.chat-item:hover  { background: #f0f0f0; }
+.chat-item.active { background: #eef; }
+.chat-item img    { border-radius: 4px; flex-shrink: 0; }
+
+/* ==========================================================
+   Центральная колонка: диалог
+   ========================================================== */
+.dialog {
+  flex: 1;                     /* забирает оставшееся место */
+  min-width: 0;                /* ← важно: иначе не даст сжиматься */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dialog h2 {
+  margin: 0;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================
+   Сообщения
+   ========================================================== */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  scroll-behavior: smooth;
+}
+.message {
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+.message .author { font-weight: bold; }
+.message small   { color: #777; margin-left: 6px; }
+
+/* ==========================================================
+   Форма отправки
+   ========================================================== */
+.message-form {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  border-top: 1px solid #ccc;
+}
+.message-form input[type=text] {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ccc;
+}
+.message-form button {
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   Правая колонка: участники (поддержаны оба класса)
+   ========================================================== */
+.members,
+.members-panel {
+  width: 280px;
+  flex-shrink: 0;              /* ← не сжимается */
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 13px;
+  background: #fafafa;
+}
+
+.members h3,
+.members-panel h3 {
+  margin: 0;
+  padding: 8px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
 
+/* ==========================================================
+   Табы (если используются)
+   ========================================================== */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+.tab-btn {
+  flex: 1;
+  padding: 6px 8px;
+  background: #f7f7f7;
+  border: none;
+  border-right: 1px solid #eee;
+  cursor: pointer;
+  font-size: 13px;
+  color: #555;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active {
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  border-bottom: 2px solid #4a90e2;
+}
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.tab-content.hidden { display: none; }
+
+/* ==========================================================
+   Строка участника
+   ========================================================== */
 .member {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 0;
+  padding: 4px 8px;
   border-bottom: 1px solid #f5f5f5;
 }
-
 .member img {
   border-radius: 50%;
   flex-shrink: 0;
 }
-
 .member .name {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .member .role-form {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   margin: 0;
 }
-
 .member select {
   font-size: 12px;
   padding: 1px 2px;
   max-width: 80px;
 }
-
 .member .role-form button,
 .member .kick-form button {
   font-size: 12px;
@@ -73,30 +194,56 @@
   border: 1px solid #ccc;
   background: #fff;
 }
-
 .member .role-form button:hover {
   background: #e8f5e8;
   border-color: #4a4;
 }
-
 .member .kick-form button:hover {
   background: #fee;
   border-color: #a00;
   color: #a00;
 }
-
 .member .role {
   color: #777;
   font-size: 12px;
   font-style: italic;
 }
 
-.leave-wrap {
-  margin-top: auto;      /* прижимаем кнопку к низу */
-  padding-top: 10px;
-  border-top: 1px solid #eee;
+/* ==========================================================
+   Онлайн-точка
+   ========================================================== */
+.online-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  flex-shrink: 0;
+}
+.online-dot.online {
+  background: #2ecc71;
+  box-shadow: 0 0 4px #2ecc71;
 }
 
+/* ==========================================================
+   Индикатор набора
+   ========================================================== */
+.typing-indicator {
+  color: #777;
+  font-size: 12px;
+  font-style: italic;
+  margin-left: 8px;
+  font-weight: normal;
+}
+
+/* ==========================================================
+   Кнопка «Покинуть беседу»
+   ========================================================== */
+.leave-wrap {
+  margin-top: auto;            /* прижать к низу колонки */
+  padding: 8px;
+  border-top: 1px solid #eee;
+}
 .btn-danger {
   width: 100%;
   padding: 6px 10px;
@@ -106,8 +253,41 @@
   cursor: pointer;
   font-size: 13px;
 }
+.btn-danger:hover { background: #a00; color: #fff; }
 
-.btn-danger:hover {
-  background: #a00;
-  color: #fff;
+/* ==========================================================
+   Таб «Добавить участников»
+   ========================================================== */
+.hint {
+  color: #777;
+  font-size: 12px;
+  margin: 0 0 8px 0;
 }
+.candidates {
+  max-height: 40vh;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+.candidate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.candidate:hover { background: #f0f0f0; }
+.candidate input[type=checkbox] { margin: 0; }
+.candidate img { border-radius: 50%; }
+
+.btn-add {
+  width: 100%;
+  padding: 6px 10px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 3px;
+}
+.btn-add:hover { background: #357abd; }

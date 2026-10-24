@@ -20,14 +20,24 @@ async function loadUserConvs(userId) {
     .sort((a, b) => new Date(b.conv_created) - new Date(a.conv_created));
 }
 
-// GET /conv — список бесед, диалог не открыт
 export async function index(req, res, next) {
   try {
     if (!req.user) return res.redirect('/auth/login');
+
     const convs = await loadUserConvs(req.user.user_id);
-    res.render('convIndex', { convs, activeConv: null, messages: [] });
+
+    return res.render('convIndex', {
+      convs,
+      activeConv: null,
+      messages: [],
+      members: [],
+      roles: [],
+      isAdmin: false,
+      myUserId: req.user.user_id,   // ← вот этого не хватало
+      availableFriends: []
+    });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 }
 

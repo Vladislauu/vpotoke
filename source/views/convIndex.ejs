@@ -11,8 +11,8 @@
 <h1>Сообщения</h1>
 <p><a href="/conv/create">+ Создать беседу</a></p>
 
-<div class="messenger">
-  <%# ─────────── Левая колонка: список чатов ─────────── %>
+<div class="messenger" data-my-id="<%= locals.myUserId ?? 0 %>">
+  <%# ─────────── Левая колонка: чаты ─────────── %>
   <aside class="chats">
     <% if (convs.length === 0) { %>
       <p style="padding: 8px;">Нет бесед</p>
@@ -28,18 +28,22 @@
   </aside>
 
   <%# ─────────── Центр: диалог ─────────── %>
-  <section class="dialog">
+  <section class="dialog"
+           <% if (activeConv) { %>data-conv-id="<%= activeConv.conv_id %>"<% } %>>
     <% if (!activeConv) { %>
       <p style="padding: 8px;">Выберите беседу слева</p>
     <% } else { %>
-      <h2><%= activeConv.conv_name %></h2>
+      <h2>
+        <%= activeConv.conv_name %>
+        <small id="typing-indicator" class="typing-indicator"></small>
+      </h2>
 
-      <div class="messages">
+      <div class="messages" id="messages">
         <% if (messages.length === 0) { %>
-          <p>Сообщений пока нет</p>
+          <p id="no-messages">Сообщений пока нет</p>
         <% } %>
         <% for (const m of messages) { %>
-          <div class="message">
+          <div class="message" data-msg-id="<%= m.msg_id %>">
             <span class="author"><%= m.user.nickname %>:</span>
             <span class="text"><%= m.text %></span>
             <small><%= new Date(m.sent).toLocaleString('ru-RU') %></small>
@@ -47,9 +51,9 @@
         <% } %>
       </div>
 
-      <form class="message-form"
-            action="/conv/<%= activeConv.conv_id %>/message" method="post">
-        <input type="text" name="text" placeholder="Сообщение..."
+      <form class="message-form" id="message-form">
+        <input type="text" name="text" id="message-input"
+               placeholder="Сообщение..."
                autocomplete="off" required>
         <button type="submit">Отправить</button>
       </form>
@@ -62,13 +66,14 @@
       <h3>Участники</h3>
 
       <% for (const m of members) { %>
-        <div class="member">
+        <div class="member" data-member-id="<%= m.user_id %>">
           <img src="<%= m.user.avatar_path || '/static/default-avatar.png' %>"
                width="24" height="24" alt="">
           <span class="name"><%= m.user.nickname %></span>
 
+          <span class="online-dot" title="не в сети"></span>
+
           <% if (isAdmin && m.user_id !== myUserId) { %>
-            <%# Админ может менять роль и исключать %>
             <form class="role-form"
                   action="/conv/<%= activeConv.conv_id %>/member/<%= m.user_id %>/role"
                   method="post">
@@ -88,7 +93,6 @@
               <button type="submit" title="Исключить из беседы">✕</button>
             </form>
           <% } else { %>
-            <%# Обычный участник (или я сам) — просто показываем роль %>
             <span class="role"><%= m.role?.name || '—' %></span>
           <% } %>
         </div>
@@ -102,6 +106,10 @@
     </aside>
   <% } %>
 </div>
+
+<%# ─── Скрипты: сокет-клиент и наш модуль ─── %>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/static/scripts/conv.js" defer></script>
 
 </body>
 </html>
